@@ -75,7 +75,7 @@ class Chain(EtherBaseClass):
     def exchange(self, exchange):
         self.__exchange = exchange
 
-    def set_pools(self):
+    def set_pools(self, *args, **kwargs):
         self.pools = self.__get_pools['function'](
             *self.__get_pools['args'],
             **self.__get_pools['kwargs']

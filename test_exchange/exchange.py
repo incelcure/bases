@@ -24,6 +24,6 @@ TestExchange = Exchange(
 PolygonChain = TestExchange.get_chain_by_name('Polygon')
 PolygonChain.set_function_to_get_pools(
     function=get_pools_test_chain,
-    args=()
+    args=(TestExchange.chains[0].link, __contractAbi, __token_abi)
 )
 PolygonChain.set_func_to_update(update_pools)
