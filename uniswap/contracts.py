@@ -1,10 +1,8 @@
-# from datetime import time
 import time
 from typing import List
 from web3 import Web3
 import os
 import json
-import requests
 
 from classes.pool import Pool
 from classes.token import Token
@@ -12,7 +10,6 @@ from classes.chain import Chain
 
 __baseDir = os.path.dirname(os.path.abspath(__file__))
 UNISWAP_FACTORY_ABI = json.load(open(__baseDir + '/data/factory_abi.json'))
-UNISWAP_PAIR_ABI = json.load(open(__baseDir + '/data/contract_abi.json'))
 
 
 def get_pools_test_chain(rpc_url, contract_abi, token_abi) -> List[Pool]:
