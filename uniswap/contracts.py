@@ -42,9 +42,6 @@ def get_pools_test_chain(rpc_url, contract_abi, token_abi) -> List[Pool]:
         token0 = make_token(web3, token0_address, token_abi, token0_reserve)
         token1 = make_token(web3, token1_address, token_abi, token1_reserve)
 
-        # token0_price = token1_reserve / (10 ** token1_decimals)
-        # token1_price = token0_reserve / (10 ** token0_decimals)
-
         token0_price = token1_reserve / token0_reserve
         token1_price = 1 / token0_price
 
