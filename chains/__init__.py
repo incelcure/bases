@@ -1,1 +1,1 @@
-from .test_chain import TestChain
+from .polygon import TestChain

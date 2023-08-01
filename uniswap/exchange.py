@@ -6,11 +6,11 @@ from classes.exchange import Exchange
 from .contracts import get_pools_test_chain, update_pools
 from .calculate import calculate
 
-__name = 'test_exchange'
+__name = 'uniswap'
 __chains = [TestChain]
 __baseDir = os.path.dirname(os.path.abspath(__file__))
-__contractAbi = json.load(open(__baseDir + '/data/uniswap_pair_abi.json'))
-__token_abi = json.load(open(__baseDir + '/data/erc20_abi.json'))
+__contractAbi = json.load(open(__baseDir + '/data/contract_abi.json'))
+__token_abi = json.load(open(__baseDir + '/data/token_abi.json'))
 
 TestExchange = Exchange(
     name=__name,

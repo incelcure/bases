@@ -14,9 +14,3 @@ TestChain = ChainBase(
     scan_uri=URI('https://polygonscan.com')
 )
 
-# TestChain2 = ChainBase(
-#     name='Polygon',
-#     links=__links,
-#     scan_uri=URI('https://polygonscan.com')
-# )
-

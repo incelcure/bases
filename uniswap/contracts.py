@@ -12,7 +12,7 @@ from classes.chain import Chain
 
 __baseDir = os.path.dirname(os.path.abspath(__file__))
 UNISWAP_FACTORY_ABI = json.load(open(__baseDir + '/data/factory_abi.json'))
-UNISWAP_PAIR_ABI = json.load(open(__baseDir + '/data/uniswap_pair_abi.json'))
+UNISWAP_PAIR_ABI = json.load(open(__baseDir + '/data/contract_abi.json'))
 
 
 def get_pools_test_chain(rpc_url, contract_abi, token_abi) -> List[Pool]:
@@ -26,6 +26,7 @@ def get_pools_test_chain(rpc_url, contract_abi, token_abi) -> List[Pool]:
     swap_fee_percent = 0.3 / 100
 
     all_exchange_pools = uniswap_factory.functions.allPairsLength().call()
+    print(f'total number of pools: {all_exchange_pools}')
     pools = []
 
     pair_contract = web3.eth.contract(address='0x604229c960e5CACF2aaEAc8Be68Ac07BA9dF81c3', abi=contract_abi)
@@ -36,6 +37,13 @@ def get_pools_test_chain(rpc_url, contract_abi, token_abi) -> List[Pool]:
     token1 = make_token(web3, token1_address, token_abi, token1_reserve)
     pools.append(
         Pool(tokens=(token0, token1), address='0x604229c960e5CACF2aaEAc8Be68Ac07BA9dF81c3', swap_fee=swap_fee_percent))
+    token0_price = token1_reserve / token0_reserve
+    token1_price = 1 / token0_price
+    tvl = (token0_reserve * token0_price) + (token1_reserve * token1_price)
+    print(len(pools))
+    print(f'added: {pools[-1]}')
+    print(f'pool address: 0x604229c960e5CACF2aaEAc8Be68Ac07BA9dF81c3')
+    print(f'tvl: {tvl}')
 
     pair_contract = web3.eth.contract(address='0x853Ee4b2A13f8a742d64C8F088bE7bA2131f670d', abi=contract_abi)
     token0_address = pair_contract.functions.token0().call()
@@ -45,11 +53,16 @@ def get_pools_test_chain(rpc_url, contract_abi, token_abi) -> List[Pool]:
     token1 = make_token(web3, token1_address, token_abi, token1_reserve)
     pools.append(
         Pool(tokens=(token0, token1), address='0x853Ee4b2A13f8a742d64C8F088bE7bA2131f670d', swap_fee=swap_fee_percent))
+    token0_price = token1_reserve / token0_reserve
+    token1_price = 1 / token0_price
+    tvl = (token0_reserve * token0_price) + (token1_reserve * token1_price)
+    print(len(pools))
+    print(f'added: {pools[-1]}')
+    print(f'pool address: 0x853Ee4b2A13f8a742d64C8F088bE7bA2131f670d')
+    print(f'tvl: {tvl}')
 
-    print(pools)
-    print(all_exchange_pools)
-    for i in range(5):
-        # for i in range(all_exchange_pools):
+    for i in range(10):
+    # for i in range(all_exchange_pools):
         exchange_pool_address = uniswap_factory.functions.allPairs(i).call()
         pair_contract = web3.eth.contract(address=exchange_pool_address, abi=contract_abi)
 
@@ -68,13 +81,13 @@ def get_pools_test_chain(rpc_url, contract_abi, token_abi) -> List[Pool]:
         token1_price = 1 / token0_price
 
         tvl = (token0_reserve * token0_price) + (token1_reserve * token1_price)
-        print(f'tvl: {tvl}')
 
-        print(exchange_pool_address)
         if tvl > 200:
             pools.append(Pool(tokens=(token0, token1), address=exchange_pool_address, swap_fee=swap_fee_percent))
-            print(pools[-1])
             print(len(pools))
+            print(f'added {pools[-1]}')
+            print(f'pool address: {exchange_pool_address}')
+            print(f'tvl: {tvl}')
         else:
             continue
     return pools
@@ -90,9 +103,8 @@ def update_pools(pools: List[Pool], rpc_url, contract_abi):
         pool.tokens[0].amount = reserve0
         pool.tokens[1].amount = reserve1
 
-        print("Пул обновлен няняня")
         pool.last_update = int(time.time())
-        print(f'last update of {pool} : {pool.last_update}')
+        print(f'{pool} was updated\nlast update: {pool.last_update} ')
 
 
 def make_token(web3: Web3, token_address, token_abi, token_reserve) -> Token:
@@ -102,8 +114,3 @@ def make_token(web3: Web3, token_address, token_abi, token_reserve) -> Token:
     token = Token(symbol=token_symbol, decimal=token_decimals, address=token_address)
     token.amount = token_reserve
     return token
-
-# pools = get_pools_test_chain()
-# while True:
-#     update_pools(web3, pools)
-# print(pools)
