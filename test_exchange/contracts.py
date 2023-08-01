@@ -22,7 +22,8 @@ def get_pools_test_chain(rpc_url, contract_abi, token_abi) -> List[Pool]:
     UNISWAP_FACTORY_ADDRESS = '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32'  # Polygon
     uniswap_factory = web3.eth.contract(address=UNISWAP_FACTORY_ADDRESS, abi=UNISWAP_FACTORY_ABI)
 
-    swap_fee_percent = 0.3 / 1e6
+    # swap_fee_percent = 0.3 / 1e6
+    swap_fee_percent = 0.3 / 100
 
     all_exchange_pools = uniswap_factory.functions.allPairsLength().call()
     pools = []
