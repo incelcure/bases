@@ -29,38 +29,6 @@ def get_pools_test_chain(rpc_url, contract_abi, token_abi) -> List[Pool]:
     print(f'total number of pools: {all_exchange_pools}')
     pools = []
 
-    pair_contract = web3.eth.contract(address='0x604229c960e5CACF2aaEAc8Be68Ac07BA9dF81c3', abi=contract_abi)
-    token0_address = pair_contract.functions.token0().call()
-    token1_address = pair_contract.functions.token1().call()
-    token0_reserve, token1_reserve, _ = pair_contract.functions.getReserves().call()
-    token0 = make_token(web3, token0_address, token_abi, token0_reserve)
-    token1 = make_token(web3, token1_address, token_abi, token1_reserve)
-    pools.append(
-        Pool(tokens=(token0, token1), address='0x604229c960e5CACF2aaEAc8Be68Ac07BA9dF81c3', swap_fee=swap_fee_percent))
-    token0_price = token1_reserve / token0_reserve
-    token1_price = 1 / token0_price
-    tvl = (token0_reserve * token0_price) + (token1_reserve * token1_price)
-    print(len(pools))
-    print(f'added: {pools[-1]}')
-    print(f'pool address: 0x604229c960e5CACF2aaEAc8Be68Ac07BA9dF81c3')
-    print(f'tvl: {tvl}')
-
-    pair_contract = web3.eth.contract(address='0x853Ee4b2A13f8a742d64C8F088bE7bA2131f670d', abi=contract_abi)
-    token0_address = pair_contract.functions.token0().call()
-    token1_address = pair_contract.functions.token1().call()
-    token0_reserve, token1_reserve, _ = pair_contract.functions.getReserves().call()
-    token0 = make_token(web3, token0_address, token_abi, token0_reserve)
-    token1 = make_token(web3, token1_address, token_abi, token1_reserve)
-    pools.append(
-        Pool(tokens=(token0, token1), address='0x853Ee4b2A13f8a742d64C8F088bE7bA2131f670d', swap_fee=swap_fee_percent))
-    token0_price = token1_reserve / token0_reserve
-    token1_price = 1 / token0_price
-    tvl = (token0_reserve * token0_price) + (token1_reserve * token1_price)
-    print(len(pools))
-    print(f'added: {pools[-1]}')
-    print(f'pool address: 0x853Ee4b2A13f8a742d64C8F088bE7bA2131f670d')
-    print(f'tvl: {tvl}')
-
     for i in range(10):
     # for i in range(all_exchange_pools):
         exchange_pool_address = uniswap_factory.functions.allPairs(i).call()

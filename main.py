@@ -1,20 +1,15 @@
 from uniswap.exchange import TestExchange
 from tests import test_data
-import time
 
 
 def main():
     exchange = TestExchange
-    print(f'link: {exchange.chains[0].link}')
-
     rpc_url = exchange.chains[0].link
     contract_abi = exchange.contract_abi
     token_abi = exchange.token_abi
 
     exchange.chains[0].set_pools(rpc_url, contract_abi, token_abi)
-
     pools = exchange.chains[0].pools
-    print(f'pools: {pools}')
 
     while True:
         exchange.chains[0].update(pools, rpc_url, contract_abi)
